@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.*
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Migrations (optional — keep if using Alembic migrations)
+# migrations/
+# alembic/
+
+# Coverage / Testing
+.coverage
+htmlcov/
+.cache/
+pytest_cache/
+
+# PyInstaller
+*.spec
+dist/
+build/
+
+# MyPy and other tooling
+.mypy_cache/
+.pytest_cache/
+.dmypy.json
+.pyre/
+
+# Database files (if any local SQLite used)
+*.db
+
+# Optional: Jupyter / notebooks
+.ipynb_checkpoints/
