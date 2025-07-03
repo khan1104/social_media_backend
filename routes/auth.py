@@ -5,13 +5,16 @@ from database.models.users import User
 from utils.password import verify_password,hash_password
 from auth.auth import create_token,get_current_user
 from utils.send_otp import send_email
+from config.redis import redis_client
+from utils.verify_otp import otp_storage,validate_otp
+from datetime import datetime,timedelta
 
 from database.schemas.auth import UserResponse,CreateUser,LoginUser,Token
 
 router=APIRouter()
 
 
-opt_storage={}
+# opt_storage={}
 
 def finduser(email:str,db:Session):
     user=db.query(User).filter(User.email == email,User.is_deleted==False,User.is_verified==True).first()
@@ -56,8 +59,8 @@ def register_user(data: CreateUser, db: Session = Depends(get_db)):
     db.refresh(new_user)
         
     otp = send_email(new_user.email)
-    opt_storage[new_user.email] = otp  
-    print(opt_storage.get(new_user.email))
+    expr_time=datetime.now()+timedelta(seconds=60)
+    otp_storage[new_user.email]={"time":expr_time,"otp":otp}
     return {"message": f"OTP sent to {new_user.email}, please verify it."}
 
 @router.post("/verify", status_code=status.HTTP_200_OK, response_model=UserResponse)
@@ -66,14 +69,9 @@ def verify_otp(email: str, otp: int, db: Session = Depends(get_db)):
     user = find_not_verified_user(email,db)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
-
-    if str(opt_storage.get(user.email)) != str(otp):
-        raise HTTPException(status_code=400, detail="Invalid OTP for this email")
-
+    validate_otp(email,otp)
     user.is_verified = True
     db.commit()
-
-    opt_storage.pop(user.email, None) 
     return user
 
 @router.post("/login", status_code=status.HTTP_200_OK,response_model=Token)
