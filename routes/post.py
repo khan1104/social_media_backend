@@ -2,7 +2,6 @@
 from fastapi import APIRouter,HTTPException,Depends,status
 from database.models.posts import Posts
 from database.schemas.posts import CreatePost,ResponsePost,CreateResponsePost,UpdatePost
-
 from config.database import get_db
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -40,7 +39,7 @@ def create_post(post:CreatePost,db: Session = Depends(get_db),current_user=Depen
 @router.put("/posts/{id}", response_model=ResponsePost, status_code=status.HTTP_200_OK)
 def update_post(
     id: int,
-    post: CreatePost,
+    post:UpdatePost,
     db: Session = Depends(get_db)
 ):
     existing_post = find(id,db)

@@ -1,5 +1,5 @@
 
-import secure_smtplib 
+# import secure_smtplib 
 import smtplib  
 import ssl
 from email.mime.text import MIMEText

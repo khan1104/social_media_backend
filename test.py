@@ -122,34 +122,33 @@
 
 
 from datetime import datetime,timedelta
-# from config.redis import redis_client
+from config.redis import redis_client
 
 
-# redis_client.set("khan@gmail.com","1234")
+redis_client.set("name","1234")
 
-# data=redis_client.get("khan@gmail.com")
-# print(data)
+data=redis_client.get("aman")
+print(data)
+# otps={}
 
-otps={}
+# otps["khanirfan@gmail.com"]={"time":datetime.now()+timedelta(seconds=60),"otp":222}
+# otps["khan@gmail.com"]={"time":datetime.now()+timedelta(seconds=60),"otp":2232}
+# print(otps)
 
-otps["khanirfan@gmail.com"]={"time":datetime.now()+timedelta(seconds=60),"otp":222}
-otps["khan@gmail.com"]={"time":datetime.now()+timedelta(seconds=60),"otp":2232}
-print(otps)
+# # email=input("enter email:")
+# # otp=int(input("enter the otp:"))
 
-# email=input("enter email:")
-# otp=int(input("enter the otp:"))
+# def verify_otp(email,otp):
+#     data=otps.get(email)
 
-def verify_otp(email,otp):
-    data=otps.get(email)
-
-    if data:
-        if data["time"] < datetime.now():
-            otps.pop(email)
-            print("❌ OTP expired")
-        elif data["otp"] == otp:
-            otps.pop(email)  # optional: remove after success
-            print("✅ Successful login")
-        else:
-            print("❌ Invalid OTP")
-    else:
-        print("❌ Email not found")
+#     if data:
+#         if data["time"] < datetime.now():
+#             otps.pop(email)
+#             print("❌ OTP expired")
+#         elif data["otp"] == otp:
+#             otps.pop(email)  # optional: remove after success
+#             print("✅ Successful login")
+#         else:
+#             print("❌ Invalid OTP")
+#     else:
+#         print("❌ Email not found")

@@ -13,6 +13,7 @@ class CreateUser(BaseUser):
 class UpdateUser(BaseUser):
     pass
 
+
 class UserResponse(BaseModel):
     id:int
     user_name:str

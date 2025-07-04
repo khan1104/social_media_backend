@@ -46,7 +46,7 @@ def comment(comment:Comment,db:Session=Depends(get_db),current_user=Depends(get_
     db.commit()
     db.refresh(new_comment)
 
-@router.post("/follow")
+@router.post("/follow",status_code=status.HTTP_200_OK)
 def follow(user_id:int,db:Session=Depends(get_db),current_user=Depends(get_current_user)):
     user=find_user(user_id,db)
     if user is None:

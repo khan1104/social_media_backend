@@ -3,18 +3,15 @@ from config.database import get_db
 from sqlalchemy.orm import Session
 from database.models.users import User
 from utils.password import verify_password,hash_password
-from auth.auth import create_token,get_current_user
+from auth.auth import create_token
 from utils.send_otp import send_email
 from config.redis import redis_client
-from utils.verify_otp import otp_storage,validate_otp
-from datetime import datetime,timedelta
+from utils.verify_otp import validate_otp
 
 from database.schemas.auth import UserResponse,CreateUser,LoginUser,Token
 
 router=APIRouter()
 
-
-# opt_storage={}
 
 def finduser(email:str,db:Session):
     user=db.query(User).filter(User.email == email,User.is_deleted==False,User.is_verified==True).first()
@@ -59,8 +56,7 @@ def register_user(data: CreateUser, db: Session = Depends(get_db)):
     db.refresh(new_user)
         
     otp = send_email(new_user.email)
-    expr_time=datetime.now()+timedelta(seconds=60)
-    otp_storage[new_user.email]={"time":expr_time,"otp":otp}
+    redis_client.setex(f"otp:{new_user.email}",90,otp)
     return {"message": f"OTP sent to {new_user.email}, please verify it."}
 
 @router.post("/verify", status_code=status.HTTP_200_OK, response_model=UserResponse)
